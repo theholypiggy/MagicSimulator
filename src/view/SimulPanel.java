@@ -1,6 +1,7 @@
 package view;
 import javax.swing.JPanel;
 
+import controller.GameController;
 import controller.KeyController;
 import controller.MouseController;
 import domain.Game;
@@ -14,20 +15,25 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
 
-@SuppressWarnings("unused")
 public class SimulPanel extends JPanel implements MouseListener, MouseMotionListener, KeyListener
 {
     private static final long serialVersionUID = 3332707163650954981L;
     private MouseController mc;
     private KeyController   kc;
+    private GameController  gc;
     private int             width;
     private int             height;
+    private int             frameRate;
+    
+    private static final int DEFAULT_FRAME_RATE = 1000000 / 60;
     
     public SimulPanel(Game game, int width, int height) {
         mc = new MouseController(game);
-        kc = new KeyController();
+        kc = new KeyController(game);
+        gc = new GameController(game);
         this.width = width;
         this.height = height;
+        this.frameRate = DEFAULT_FRAME_RATE;
         
         setFocusable(true);
         addKeyListener(this);
@@ -35,6 +41,19 @@ public class SimulPanel extends JPanel implements MouseListener, MouseMotionList
         addMouseMotionListener(this);
         setVisible(true);
     }
+    
+    //----OWN METHODS----
+    
+    public void start() {
+        try {
+            gc.performAction();
+            Thread.sleep(frameRate);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    //----END OWN METHODS----
     
     //----PAINT METHODS----
     public void paintComponent(Graphics g) {

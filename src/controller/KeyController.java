@@ -1,9 +1,13 @@
 package controller;
 
+import domain.Game;
+
 public class KeyController
 {
-    public KeyController() {
-        
+    private Game game;
+    
+    public KeyController(Game game) {
+        this.game = game;
     }
     
     public void keyPressed(int keyCode) {
